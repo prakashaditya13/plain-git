@@ -4,7 +4,9 @@ import chalk from 'chalk';
 import figlet from 'figlet';
 import { GitDetector } from '../core/GitDetector';
 import { Logger } from '../utils/Logger';
-
+import { COMMANDS_LIST } from '../config/commandsList';
+import { handleCommand } from '../core/HandleCommands';
+import { BranchDetector } from '../core/BranchDetector';
 
 /**
  * plain-git CLI
@@ -22,81 +24,72 @@ function showBanner() {
   console.log(chalk.cyanBright(figlet.textSync('Plain-Git', { horizontalLayout: 'default' })));
   console.log(chalk.gray('✨ Operate Git in plain English.\n'));
 
-  Logger.info("🚀 Initializing plain-git environment check...\n");
+  Logger.info('🚀 Initializing plain-git environment check...\n');
 }
 
 /**
  * Displays the interactive menu options for the developer.
+ * Dynamically build menu from COMMANDS_LIST
  */
-async function showMenu(): Promise<string> {
-  const choices = [
-    { name: '📦 Initialize a new Git repository', value: 'init' },
-    { name: '📂 Check repository status', value: 'status' },
-    { name: '🌿 Create a new branch', value: 'branch' },
-    { name: '📝 Commit changes', value: 'commit' },
-    { name: '🚀 Push changes to remote', value: 'push' },
-    { name: '⬇️ Pull latest changes', value: 'pull' },
-    { name: '❌ Exit', value: 'exit' },
-  ];
+async function showMenu(): Promise<void> {
+  const currentBranch = BranchDetector.getCurrentBranch();
 
-  const { command } = await inquirer.prompt([
+  console.log();
+  if (currentBranch) {
+    console.log(chalk.cyanBright(`📍 Current branch: ${chalk.bold(currentBranch)}`));
+  } else {
+    console.log(chalk.gray('📍 Not inside a Git repository'));
+  }
+  console.log(chalk.gray('--------------------------------------------------\n'));
+
+  const choices = COMMANDS_LIST.map((cmd) => ({
+    name: `${cmd.name}  ${cmd.command.includes('<') ? '(requires input)' : ''}`,
+    value: cmd.handler, // use handler instead of direct git command
+    short: cmd.category,
+  }));
+
+  const { selected } = await inquirer.prompt([
     {
       type: 'list',
-      name: 'command',
-      message: 'What would you like to do?',
-      choices,
+      name: 'selected',
+      message: 'Select a Git operation to perform:',
+      pageSize: 20,
+      choices: [...choices, new inquirer.Separator(), { name: '❌ Exit', value: 'exit' }],
     },
   ]);
 
-  return command;
+  if (selected === 'exit') {
+    Logger.info('👋 Exiting plain-git.');
+    process.exit(0);
+  }
+
+  await handleCommand(selected);
+  Logger.success('\n✅ Operation completed successfully!\n');
+
+  //   await showMenu(); // loop back
 }
 
 /**
- * Handles user-selected menu commands.
+ * Local placeholder removed: using imported handleCommand from '../core/HandleCommands'.
  */
-async function handleCommand(command: string) {
-  switch (command) {
-    case 'init':
-      //   await RepositoryManager.init();
-      break;
-    case 'status':
-      //   await RepositoryManager.status();
-      break;
-    case 'branch':
-      //   await RepositoryManager.createBranch();
-      break;
-    case 'commit':
-      //   await RepositoryManager.commitChanges();
-      break;
-    case 'push':
-      //   await RepositoryManager.pushChanges();
-      break;
-    case 'pull':
-      //   await RepositoryManager.pullChanges();
-      break;
-    default:
-      Logger.info('👋 Goodbye!');
-      process.exit(0);
-  }
-}
 
 /**
  * Main entry function
  */
 (async function main() {
-  console.clear();
-  // Welcome banner
-  showBanner();
+  try {
+    console.clear();
+    // Welcome banner
+    showBanner();
 
-  // Step 1: Ensure Git is available and check environment
-  await GitDetector.checkEnvironment();
+    // Step 1: Ensure Git is available and check environment
+    await GitDetector.checkEnvironment();
 
-  Logger.success("\n🎯 Environment ready! You can start using plain-git commands.");
+    Logger.success('\n🎯 Environment ready! You can start using plain-git commands.');
 
-  // Step 2: Interactive menu
-  while (true) {
-    const selected = await showMenu();
-    await handleCommand(selected);
-    console.log('\n');
+    // Step 2: Launch category-based command menu
+    await showMenu();
+  } catch (error) {
+    Logger.error(`❌ Something went wrong: ${(error as Error).message}`);
   }
 })();
