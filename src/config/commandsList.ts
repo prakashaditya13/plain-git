@@ -396,19 +396,54 @@ export const COMMANDS_LIST: PlainGitCommand[] = [
     handler: 'HistoryManager.showAuthorSummary',
   },
 
-  // 🧹 Reset & Cleanup
+  // ♻️ Reset & Cleanup
   {
     category: 'Reset',
     name: '↩️ Undo last commit (soft)',
     command: 'git reset --soft HEAD~1',
     description: 'Undo last commit but keep changes staged.',
-    handler: 'ResetManager.undoLastCommit',
+    handler: 'ResetManager.undoLastCommitSoft',
+  },
+  {
+    category: 'Reset',
+    name: '🔄 Undo last commit (mixed)',
+    command: 'git reset --mixed HEAD~1',
+    description: 'Undo last commit but keep changes unstaged.',
+    handler: 'ResetManager.undoLastCommitMixed',
+  },
+  {
+    category: 'Reset',
+    name: '💣 Undo last commit (hard)',
+    command: 'git reset --hard HEAD~1',
+    description: 'Completely discard last commit and all changes.',
+    handler: 'ResetManager.undoLastCommitHard',
+  },
+  {
+    category: 'Reset',
+    name: '🕓 Reset to a specific commit',
+    command: 'git reset [--soft|--mixed|--hard] <commit-hash>',
+    description: 'Reset repository to a specific commit with chosen mode.',
+    handler: 'ResetManager.resetToSpecificCommit',
+  },
+  {
+    category: 'Reset',
+    name: '🧩 Discard changes in files',
+    command: 'git restore <file>',
+    description: 'Revert specific files to the state of last commit.',
+    handler: 'ResetManager.discardFileChanges',
   },
   {
     category: 'Reset',
     name: '🧹 Clean untracked files',
     command: 'git clean -fd',
-    description: 'Remove all untracked files and folders.',
+    description: 'Remove all untracked files and directories.',
     handler: 'ResetManager.cleanUntracked',
+  },
+  {
+    category: 'Reset',
+    name: '⚙️ Interactive reset mode',
+    command: 'git reset [interactive]',
+    description: 'Select reset type interactively from a menu.',
+    handler: 'ResetManager.interactiveReset',
   },
 ];
