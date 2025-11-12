@@ -53,7 +53,7 @@ async function showMenu(): Promise<void> {
       type: 'list',
       name: 'selected',
       message: 'Select a Git operation to perform:',
-      pageSize: 20,
+      pageSize: 50,
       choices: [...choices, new inquirer.Separator(), { name: '❌ Exit', value: 'exit' }],
     },
   ]);
