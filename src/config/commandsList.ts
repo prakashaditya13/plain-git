@@ -181,26 +181,76 @@ export const COMMANDS_LIST: PlainGitCommand[] = [
   },
 
   // 📝 Commit Operations
+  // 📝 Commit Operations
   {
     category: 'Commit',
     name: '🧩 Stage all changes',
     command: 'git add .',
-    description: 'Add all modified files to staging.',
+    description: 'Stage all modified and untracked files.',
     handler: 'CommitManager.stageAll',
   },
   {
     category: 'Commit',
-    name: '📝 Commit all staged changes',
+    name: '🧩 Stage specific files',
+    command: 'git add <file>',
+    description: 'Interactively select specific files to stage.',
+    handler: 'CommitManager.stageFiles',
+  },
+  {
+    category: 'Commit',
+    name: '🗑️ Unstage files',
+    command: 'git restore --staged <file>',
+    description: 'Remove files from staging area (unstage).',
+    handler: 'CommitManager.unstageFiles',
+  },
+  {
+    category: 'Commit',
+    name: '📝 Commit staged changes',
     command: "git commit -m '<message>'",
-    description: 'Commit staged changes with a message.',
+    description: 'Commit all staged changes with a message.',
     handler: 'CommitManager.commitChanges',
   },
   {
     category: 'Commit',
-    name: '📜 Show commit history',
-    command: 'git log --oneline',
-    description: 'Show a compact list of previous commits.',
+    name: '✏️ Amend last commit message',
+    command: "git commit --amend -m '<new-message>'",
+    description: 'Edit or replace the most recent commit message.',
+    handler: 'CommitManager.amendLastCommit',
+  },
+  {
+    category: 'Commit',
+    name: '↩️ Undo last commit (keep changes)',
+    command: 'git reset --soft HEAD~1',
+    description: 'Undo the most recent commit but keep changes staged.',
+    handler: 'CommitManager.undoLastCommit',
+  },
+  {
+    category: 'Commit',
+    name: '📜 Show last commit details',
+    command: 'git show HEAD',
+    description: 'View details of the most recent commit.',
+    handler: 'CommitManager.showLastCommit',
+  },
+  {
+    category: 'Commit',
+    name: '📚 View commit history (graph)',
+    command: 'git log --oneline --graph --decorate',
+    description: 'Display commit history in graphical format.',
     handler: 'CommitManager.showLog',
+  },
+  {
+    category: 'Commit',
+    name: '🔍 View unstaged changes (diff)',
+    command: 'git diff',
+    description: 'Show changes not yet staged for commit.',
+    handler: 'CommitManager.showDiff',
+  },
+  {
+    category: 'Commit',
+    name: '🔍 View staged changes (cached diff)',
+    command: 'git diff --cached',
+    description: 'Show differences between staged and last commit.',
+    handler: 'CommitManager.showStagedDiff',
   },
 
   // 🚀 Remote Operations
