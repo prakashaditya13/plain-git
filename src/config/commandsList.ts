@@ -181,7 +181,6 @@ export const COMMANDS_LIST: PlainGitCommand[] = [
   },
 
   // 📝 Commit Operations
-  // 📝 Commit Operations
   {
     category: 'Commit',
     name: '🧩 Stage all changes',
@@ -256,24 +255,80 @@ export const COMMANDS_LIST: PlainGitCommand[] = [
   // 🚀 Remote Operations
   {
     category: 'Remote',
-    name: '🚀 Push changes to remote',
-    command: 'git push',
-    description: 'Push local commits to the default remote branch.',
+    name: '🔗 List all remotes',
+    command: 'git remote -v',
+    description: 'List all configured remote repositories.',
+    handler: 'RemoteManager.listRemotes',
+  },
+  {
+    category: 'Remote',
+    name: '➕ Add a new remote',
+    command: 'git remote add <name> <url>',
+    description: 'Add a new remote repository by name and URL.',
+    handler: 'RemoteManager.addRemote',
+  },
+  {
+    category: 'Remote',
+    name: '✏️ Rename a remote',
+    command: 'git remote rename <old> <new>',
+    description: 'Rename an existing remote repository.',
+    handler: 'RemoteManager.renameRemote',
+  },
+  {
+    category: 'Remote',
+    name: '🗑️ Remove a remote',
+    command: 'git remote remove <name>',
+    description: 'Remove a remote repository from configuration.',
+    handler: 'RemoteManager.removeRemote',
+  },
+  {
+    category: 'Remote',
+    name: '⚙️ Change a remote URL',
+    command: 'git remote set-url <name> <url>',
+    description: 'Change the URL for an existing remote repository.',
+    handler: 'RemoteManager.updateRemoteUrl',
+  },
+  {
+    category: 'Remote',
+    name: '🚀 Push changes',
+    command: 'git push <remote>',
+    description: 'Push commits to a remote repository.',
     handler: 'RemoteManager.pushChanges',
   },
   {
     category: 'Remote',
+    name: '🚀 Push branch and set upstream',
+    command: 'git push -u <remote> <branch>',
+    description: 'Push a branch and set it to track a remote branch.',
+    handler: 'RemoteManager.pushWithUpstream',
+  },
+  {
+    category: 'Remote',
     name: '⬇️ Pull latest changes',
-    command: 'git pull',
-    description: 'Pull changes from the remote branch into your local branch.',
+    command: 'git pull <remote>',
+    description: 'Pull changes from the selected remote repository.',
     handler: 'RemoteManager.pullChanges',
   },
   {
     category: 'Remote',
-    name: '🔍 Fetch updates from remote',
-    command: 'git fetch',
-    description: 'Fetch remote changes without merging them.',
+    name: '🔍 Fetch updates',
+    command: 'git fetch [remote]',
+    description: 'Fetch new data from a remote without merging it.',
     handler: 'RemoteManager.fetchUpdates',
+  },
+  {
+    category: 'Remote',
+    name: '🌎 Show remote details',
+    command: 'git remote show <name>',
+    description: 'View information about a specific remote repository.',
+    handler: 'RemoteManager.showRemoteInfo',
+  },
+  {
+    category: 'Remote',
+    name: '🔄 Sync all remotes',
+    command: 'git fetch --all && git pull --all',
+    description: 'Fetch and pull updates from all configured remotes.',
+    handler: 'RemoteManager.syncAll',
   },
 
   // 🕓 History & Diff
