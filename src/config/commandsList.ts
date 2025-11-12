@@ -331,20 +331,69 @@ export const COMMANDS_LIST: PlainGitCommand[] = [
     handler: 'RemoteManager.syncAll',
   },
 
-  // 🕓 History & Diff
+  // 🕓 History & Insights
   {
     category: 'History',
-    name: '🕓 View commit history (graph)',
+    name: '📜 View commit history (graph)',
     command: 'git log --oneline --graph --decorate',
-    description: 'Show commits with visual branch structure.',
+    description: 'View commit history in various formats (compact, detailed, graph).',
     handler: 'HistoryManager.showHistoryGraph',
   },
   {
     category: 'History',
-    name: '🔍 Compare changes (diff)',
+    name: '🧾 View reflog (actions history)',
+    command: 'git reflog',
+    description: 'View reference log of all actions like reset, merge, rebase, etc.',
+    handler: 'HistoryManager.showReflog',
+  },
+  {
+    category: 'History',
+    name: '🔍 View specific commit details',
+    command: 'git show <commit-hash>',
+    description: 'Inspect a specific commit in detail.',
+    handler: 'HistoryManager.showCommitDetails',
+  },
+  {
+    category: 'History',
+    name: '🔁 Compare two commits (diff)',
+    command: 'git diff <commit1> <commit2>',
+    description: 'Compare changes between two commits interactively.',
+    handler: 'HistoryManager.compareCommits',
+  },
+  {
+    category: 'History',
+    name: '🔍 View working directory diff',
     command: 'git diff',
     description: 'Compare working directory with last commit.',
     handler: 'HistoryManager.showDiff',
+  },
+  {
+    category: 'History',
+    name: '🧩 View diff for a specific file',
+    command: 'git diff <file>',
+    description: 'View differences for a specific tracked file.',
+    handler: 'HistoryManager.showFileDiff',
+  },
+  {
+    category: 'History',
+    name: '📂 View commit history for a file',
+    command: 'git log --oneline -- <file>',
+    description: 'Show commits that affected a specific file.',
+    handler: 'HistoryManager.showFileHistory',
+  },
+  {
+    category: 'History',
+    name: '👤 Blame a file (line history)',
+    command: 'git blame <file>',
+    description: 'Show who last modified each line of a file.',
+    handler: 'HistoryManager.blameFile',
+  },
+  {
+    category: 'History',
+    name: '🧑‍💻 Show author summary (shortlog)',
+    command: 'git shortlog -sn --all',
+    description: 'Display commit counts by each contributor.',
+    handler: 'HistoryManager.showAuthorSummary',
   },
 
   // 🧹 Reset & Cleanup
