@@ -6,7 +6,7 @@
  * -------------------------------------------------------------
  */
 
-import {RepositoryManager, BranchManager, CommitManager, RemoteManager, HistoryManager, ResetManager} from '../../managers'
+import {RepositoryManager, BranchManager, CommitManager, RemoteManager, HistoryManager, ResetManager, StashManager, TagManager, MergeManager, RebaseManager, ConflictManager} from '../../managers'
 
 export const managerMap: Record<string, any> = {
   RepositoryManager,
@@ -15,4 +15,9 @@ export const managerMap: Record<string, any> = {
   RemoteManager,
   HistoryManager,
   ResetManager,
+  StashManager,
+  TagManager,
+  MergeManager,
+  RebaseManager,
+  ConflictManager
 };

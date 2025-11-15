@@ -4,6 +4,11 @@ import { CommitManager } from "./CommitManager";
 import { RemoteManager } from "./RemoteManager";
 import { ResetManager } from "./ResetManager";
 import { HistoryManager } from "./HistoryManager";
+import { StashManager } from "./StashManager";
+import { TagManager } from "./TagManager";
+import { MergeManager } from "./MergeManager";
+import { RebaseManager } from "./RebaseManager";
+import { ConflictManager } from "./ConflictManager";
 
 
 export {
@@ -12,5 +17,10 @@ export {
     CommitManager,
     RemoteManager,
     ResetManager,
-    HistoryManager
+    HistoryManager,
+    StashManager,
+    TagManager,
+    MergeManager,
+    RebaseManager,
+    ConflictManager
 }
