@@ -42,19 +42,51 @@ async function showMenu(): Promise<void> {
   }
   console.log(chalk.gray('--------------------------------------------------\n'));
 
-  const choices = COMMANDS_LIST.map((cmd) => ({
-    name: `${cmd.name}  ${cmd.command.includes('<') ? '(requires input)' : ''}`,
-    value: cmd.handler, // use handler instead of direct git command
-    short: cmd.category,
-  }));
+  // Count total commands and categories
+  const totalOperations = COMMANDS_LIST.length;
+  const categories = [...new Set(COMMANDS_LIST.map((cmd) => cmd.category))];
+  const totalCategories = categories.length;
 
+  console.log(chalk.yellowBright(`\n📊 Total operations available: ${totalOperations}`));
+  console.log(chalk.yellowBright(`📁 Categories: ${totalCategories} (${categories.join(', ')})`));
+
+  console.log(chalk.gray('\n--------------------------------------------------\n'));
+
+  // Group COMMANDS_LIST by category
+  const grouped = COMMANDS_LIST.reduce<Record<string, typeof COMMANDS_LIST>>((acc, cmd) => {
+    if (!acc[cmd.category]) acc[cmd.category] = [];
+    acc[cmd.category].push(cmd);
+    return acc;
+  }, {});
+
+  const choices: any[] = [];
+
+  // Build grouped menu
+  for (const [category, cmds] of Object.entries(grouped)) {
+    choices.push(
+      new inquirer.Separator(chalk.cyanBright.bold(`── ${category.toUpperCase()} COMMANDS ──`)),
+    );
+
+    cmds.forEach((cmd) => {
+      choices.push({
+        name: `${cmd.name} ${cmd.command.includes('<') ? chalk.gray('(requires input)') : ''}`,
+        value: cmd.handler,
+        short: cmd.category,
+      });
+    });
+  }
+
+  choices.push(new inquirer.Separator());
+  choices.push({ name: chalk.redBright('❌ Exit'), value: 'exit' });
+
+  // Interactive prompt
   const { selected } = await inquirer.prompt([
     {
       type: 'list',
       name: 'selected',
       message: 'Select a Git operation to perform:',
       pageSize: 50,
-      choices: [...choices, new inquirer.Separator(), { name: '❌ Exit', value: 'exit' }],
+      choices,
     },
   ]);
 
