@@ -153,6 +153,6 @@ export const RepositoryManager = {
   // 🧾 Check Repository Integrity
   async verifyRepo() {
     Logger.info("🔎 Verifying repository integrity...");
-    await GitExecutor.run("git fsck --full");
+    await GitExecutor.run("git fsck --full --progress");
   },
 };

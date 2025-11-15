@@ -7,6 +7,7 @@ import { Logger } from '../utils/Logger';
 import { COMMANDS_LIST } from '../config/commandsList';
 import { handleCommand } from '../core/HandleCommands';
 import { BranchDetector } from '../core/BranchDetector';
+import { stdout } from 'process';
 
 /**
  * plain-git CLI
@@ -85,7 +86,7 @@ async function showMenu(): Promise<void> {
       type: 'list',
       name: 'selected',
       message: 'Select a Git operation to perform:',
-      pageSize: 50,
+      pageSize: Math.min(process.stdout.rows - 6, choices.length),
       choices,
     },
   ]);
@@ -97,6 +98,8 @@ async function showMenu(): Promise<void> {
 
   await handleCommand(selected);
   Logger.success('\n✅ Operation completed successfully!\n');
+
+  process.exit(0);
 
   //   await showMenu(); // loop back
 }
