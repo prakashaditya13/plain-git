@@ -7,7 +7,6 @@ import { Logger } from '../utils/Logger';
 import { COMMANDS_LIST } from '../config/commandsList';
 import { handleCommand } from '../core/HandleCommands';
 import { BranchDetector } from '../core/BranchDetector';
-import { stdout } from 'process';
 
 /**
  * plain-git CLI
