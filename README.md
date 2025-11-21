@@ -2,7 +2,6 @@
 ### _Operate Git in plain English — a fully interactive, human-friendly Git CLI_
 
 ![banner](https://dummyimage.com/1200x200/222/fff&text=plain-git)  
-*(Replace with your own banner if needed)*
 
 ---
 
