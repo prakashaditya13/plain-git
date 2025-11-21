@@ -10,9 +10,8 @@
 
 import inquirer from 'inquirer';
 import { execSync } from 'child_process';
-import { GitExecutor } from '../core/GitExecutor';  
+import { GitExecutor } from '../core/GitExecutor';
 import { Logger } from '../utils/Logger';
-
 
 /**
  * Helper: get list of remote names
@@ -122,18 +121,43 @@ export const RemoteManager = {
    */
   async pushChanges() {
     const remotes = getRemoteList();
-    const { remote } = await inquirer.prompt([
-      {
-        type: 'list',
-        name: 'remote',
-        message: 'Select remote to push to:',
-        choices: remotes.length ? remotes : ['origin'],
-      },
-    ]);
+    // Step 1 — If no remotes, ask user to add one
+    if (remotes.length === 0) {
+      Logger.error('❌ No remote found for this repository.');
 
-    Logger.info(`🚀 Pushing changes to '${remote}'...`);
-    await GitExecutor.run(`git push ${remote}`);
-    Logger.success(`✅ Changes pushed to '${remote}'!`);
+      const { url } = await inquirer.prompt([
+        { type: 'input', name: 'url', message: "Enter remote URL to add as 'origin':" },
+      ]);
+
+      Logger.info(`🔗 Adding remote origin → ${url}`);
+      await GitExecutor.run(`git remote add origin ${url}`);
+      remotes.push('origin');
+    }
+
+    // Step 2 — Detect current branch
+    const currentBranch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf-8' }).trim();
+
+    // Step 3 — Check if branch has upstream
+    let hasUpstream = true;
+    try {
+      execSync('git rev-parse --abbrev-ref --symbolic-full-name @{u}');
+    } catch {
+      hasUpstream = false;
+    }
+
+    // Step 4 — If no upstream, push -u
+    if (!hasUpstream) {
+      Logger.info(`🚀 First-time push detected for branch '${currentBranch}'.`);
+      Logger.info(`Setting upstream to origin/${currentBranch}...`);
+      await GitExecutor.run(`git push -u origin ${currentBranch}`);
+      Logger.success('✅ Pushed & upstream tracking set!');
+      return;
+    }
+
+    // Step 5 — Normal push
+    Logger.info(`🚀 Pushing changes to remote...`);
+    await GitExecutor.run(`git push`);
+    Logger.success('✅ Changes pushed!');
   },
 
   /**

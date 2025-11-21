@@ -49,3 +49,7 @@ export function mockInquirer(answers: Record<string, any>) {
     // ignore - tests will fail later if mock not present
   }
 }
+
+export function clearInquirerQueue() {
+  _answersQueue.length = 0;
+}
