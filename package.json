@@ -24,12 +24,23 @@
     "developer-tools"
   ],
   "files": [
-    "dist"
+    "dist/**/*",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=16"
   },
   "author": "Aditya Prakash",
+  "homepage": "https://github.com/prakashaditya13/plain-git#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prakashaditya13/plain-git.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prakashaditya13/plain-git/issues"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^30.0.0",
