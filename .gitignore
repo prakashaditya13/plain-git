@@ -3,3 +3,5 @@ dist
 .DS_Store
 .env
 coverage
+tests/sandbox/
+tests/sandbox/repo/
