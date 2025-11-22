@@ -27,10 +27,10 @@ function isMergeInProgress(): boolean {
  */
 function getConflictedFiles(): string[] {
   try {
-    const output = execSync('git diff --name-only --diff-filter=U', {
+    const output = (execSync('git diff --name-only --diff-filter=U', {
       encoding: 'utf-8',
-    });
-    return output.split('\n').filter(Boolean);
+    }) as unknown as string) ?? '';
+    return String(output).split('\n').filter(Boolean);
   } catch {
     return [];
   }
@@ -50,7 +50,8 @@ export const MergeManager = {
 
     Logger.info('🔍 Fetching branch list...');
 
-    const branchesOutput = execSync('git branch --all', { encoding: 'utf-8' })
+    const branchListRaw = (execSync('git branch --all', { encoding: 'utf-8' }) as unknown as string) ?? '';
+    const branchesOutput = String(branchListRaw)
       .split('\n')
       .map((b) => b.replace('*', '').trim())
       .filter(Boolean)

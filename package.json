@@ -1,15 +1,15 @@
 {
   "name": "plain-git",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "description": "A lightweight cross-platform CLI & library to perform Git operations using plain language commands — no dependencies, pure Node.js.",
   "main": "dist/index.js",
-  "type": "commonjs",
   "scripts": {
     "start": "ts-node src/cli/index.ts",
-    "dev": "nodemon --watch src --exec ts-node src/cli/index.ts",
-    "build": "tsc",
-    "test": "jest",
-    "clean": "rimraf dist"
+    "dev": "tsx -r tsconfig-paths/register src/cli/index.ts",
+    "build": "rimraf dist && tsc",
+    "clean": "rimraf dist",
+    "cli": "tsx src/cli/index.ts",
+    "test": "vitest"
   },
   "bin": {
     "plain-git": "./dist/cli/index.js"
@@ -23,26 +23,42 @@
     "developer-tools"
   ],
   "files": [
-    "dist"
+    "dist/**/*",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=16"
   },
   "author": "Aditya Prakash",
+  "homepage": "https://github.com/prakashaditya13/plain-git#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prakashaditya13/plain-git.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prakashaditya13/plain-git/issues"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
+    "execa": "^9.6.0",
     "husky": "^9.1.7",
     "jest": "^30.2.0",
     "lint-staged": "^16.2.6",
     "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "rimraf": "^6.1.0",
+    "strip-ansi": "^7.1.2",
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.9"
   },
   "dependencies": {
     "chalk": "^5.6.2",
